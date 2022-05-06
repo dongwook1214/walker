@@ -19,7 +19,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(color: Colors.white),
+            Container(
+                color: Colors.white, width: size.width, height: size.height),
             SafeArea(
               child: Column(
                 children: [
