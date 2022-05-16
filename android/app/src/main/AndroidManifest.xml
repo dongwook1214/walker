@@ -4,6 +4,10 @@
         android:label="flutter_project"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDF9XOq-bz1-i0caET3dL3Nsk8mtxUSrzA"/>
+            
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,4 +35,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 </manifest>

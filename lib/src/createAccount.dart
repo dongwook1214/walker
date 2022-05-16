@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'loginFunction.dart';
-import 'createAccount.dart';
+import 'createAccountFunction.dart';
 
-class MyLoginPage extends StatefulWidget {
-  const MyLoginPage({Key? key}) : super(key: key);
+class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({Key? key}) : super(key: key);
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passWordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -27,7 +25,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               child: Column(
                 children: [
                   Container(height: size.height * 0.01),
-                  _walkerTitle(),
+                  _walkerCreateAccountTitle(),
                   Stack(
                     children: [
                       _racoonImage(size),
@@ -35,9 +33,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     ],
                   ),
                   Container(height: size.height * 0.03),
-                  _loginButton(size),
-                  Container(height: size.height * 0.1),
-                  _createAccountButton(),
+                  _createAccountButton(size)
                 ],
               ),
             ),
@@ -47,12 +43,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
   }
 
-  Widget _walkerTitle() {
-    return const Center(
-      child: Text(
-        "walker",
-        style: TextStyle(fontSize: 60, fontFamily: 'shadowsIntoLight'),
-      ),
+  Widget _walkerCreateAccountTitle() {
+    return Column(
+      children: [
+        const Text(
+          "walker",
+          style: TextStyle(fontSize: 60, fontFamily: 'shadowsIntoLight'),
+        ),
+        const Text(
+          "create new account!",
+          style: TextStyle(fontSize: 10),
+        ),
+      ],
     );
   }
 
@@ -125,18 +127,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
   }
 
-  Widget _loginButton(size) {
+  Widget _createAccountButton(size) {
     return SizedBox(
       width: size.width * 0.6,
       height: size.height * 0.07,
       child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            loginFunction(
+            signUpWithEmail(
                 _idController.text, _passWordController.text, context);
           }
         },
-        child: const Text("Login"),
+        child: const Text("Create!"),
         style: ElevatedButton.styleFrom(
           side: const BorderSide(width: 0.5, color: Colors.black54),
           elevation: 6,
@@ -146,21 +148,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
           primary: Colors.yellow,
           onPrimary: Colors.black,
         ),
-      ),
-    );
-  }
-
-  Widget _createAccountButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CreateAccountPage()),
-        );
-      },
-      child: const Text(
-        " Don't have account?",
-        style: TextStyle(color: Colors.black54),
       ),
     );
   }
