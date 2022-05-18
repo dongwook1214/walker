@@ -12,7 +12,7 @@ Future loginFunction(id, password, context) async {
     if (user == null) {
       return;
     }
-    _onLoginSuccess(context);
+    _onLoginSuccess(context, id);
   } on FirebaseAuthException catch (e) {
     print(e);
     if (e.code == 'user-not-found') {
@@ -28,10 +28,10 @@ Future loginFunction(id, password, context) async {
   }
 }
 
-void _onLoginSuccess(context) {
+void _onLoginSuccess(context, id) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Map()),
+    MaterialPageRoute(builder: (context) => Map(id: id)),
   );
 }
 
