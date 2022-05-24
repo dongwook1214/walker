@@ -1,8 +1,11 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-positionPostFunction(String id, LatLng position, String story) {
+positionPostFunction(String id, LatLng position, String story, XFile image) {
+  // 위치에 따라 스토리 기록
   CollectionReference positionCollection =
       FirebaseFirestore.instance.collection('position/');
   positionCollection
@@ -14,7 +17,7 @@ positionPostFunction(String id, LatLng position, String story) {
       .collection('contents')
       .doc(autoID)
       .set({'id': id, 'story': story});
-
+  // 사용자의 id에 따라 autoID를 저장
   CollectionReference idCollection =
       FirebaseFirestore.instance.collection('id/');
   idCollection.doc(id.toString()).set({"id": id.toString()});
@@ -22,5 +25,13 @@ positionPostFunction(String id, LatLng position, String story) {
       .doc(id.toString())
       .collection("contents")
       .doc(autoID)
-      .set({"autoid": autoID});
+      .set({"autoid": autoID, "position": position.toString()});
+  // autoID의 이름으로 사진 저장
+  final storyImage = FirebaseStorage.instance
+      .ref()
+      .child('storyPicture/')
+      .child(autoID + '.png');
+  storyImage.putFile(
+    File(image.path),
+  );
 }

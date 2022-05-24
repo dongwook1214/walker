@@ -105,8 +105,10 @@ class _AddStoryPageState extends State<AddStoryPage> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             positionPostFunction(
-                widget.id, widget.position, _storycontoller.text);
+                widget.id, widget.position, _storycontoller.text, _image!);
           }
+          Navigator.pop(context);
+          _showSnackBar(context, '스토리가 기록됐습니다.');
         },
         child: const Text("Post!"),
         style: ElevatedButton.styleFrom(
@@ -120,5 +122,10 @@ class _AddStoryPageState extends State<AddStoryPage> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
