@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'map.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future loginFunction(id, password, context) async {
   try {
@@ -28,11 +29,21 @@ Future loginFunction(id, password, context) async {
   }
 }
 
-void _onLoginSuccess(context, id) {
+void _onLoginSuccess(context, id) async {
+  var position = await _getPosition();
+  var positions = LatLng(position.latitude, position.longitude);
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Map(id: id)),
+    MaterialPageRoute(builder: (context) => Map(id: id, position: positions)),
   );
+}
+
+Future<Position> _getPosition() async {
+  Position currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.low);
+
+  print(currentPosition);
+  return currentPosition;
 }
 
 void _showSnackBar(context, String message) {
