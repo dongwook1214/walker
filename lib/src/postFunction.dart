@@ -16,7 +16,7 @@ positionPostFunction(String id, LatLng position, String story, XFile image) {
       .doc(position.toString())
       .collection('contents')
       .doc(autoID)
-      .set({'id': id, 'story': story});
+      .set({'id': id, 'story': story, 'autoID': autoID});
   // 사용자의 id에 따라 autoID를 저장
   CollectionReference idCollection =
       FirebaseFirestore.instance.collection('id/');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'AddStoryPage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'getMarkerPosition.dart';
 
 class Map extends StatefulWidget {
   final String id;
@@ -14,14 +15,6 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   late GoogleMapController _controller;
-  final List<Marker> markers = [
-    Marker(
-      markerId: MarkerId("1"),
-      draggable: true,
-      onTap: () => print("Marker!"),
-      position: LatLng(37.422010970140626, -122.08405483514069),
-    )
-  ];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -39,23 +32,33 @@ class _MapState extends State<Map> {
     return Scaffold(
         body: Stack(
       children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: LatLng(widget.position.latitude, widget.position.longitude),
-            zoom: 19,
-          ),
-          onCameraMove: (CameraPosition mapPosition) {
-            widget.position = mapPosition.target;
-            print(widget.position);
+        FutureBuilder(
+          future: getMarkerPosition(context, widget.id),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      widget.position.latitude, widget.position.longitude),
+                  zoom: 19,
+                ),
+                onCameraMove: (CameraPosition mapPosition) {
+                  widget.position = mapPosition.target;
+                  print(widget.position);
+                },
+                zoomControlsEnabled: false,
+                mapType: MapType.normal,
+                onMapCreated: (controller) {
+                  setState(() {
+                    _controller = controller;
+                  });
+                },
+                markers: snapshot.data.toSet(),
+              );
+            } else {
+              return Text("Loading...");
+            }
           },
-          zoomControlsEnabled: false,
-          mapType: MapType.normal,
-          onMapCreated: (controller) {
-            setState(() {
-              _controller = controller;
-            });
-          },
-          markers: markers.toSet(),
         ),
         Center(
           child: Container(
@@ -78,6 +81,7 @@ class _MapState extends State<Map> {
           ElevatedButton(
             onPressed: () {
               _onMarkerButtonPressed(size);
+              setState(() {});
             },
             child: const Icon(
               Icons.add_location_alt_outlined,
