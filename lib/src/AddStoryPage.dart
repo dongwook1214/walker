@@ -109,7 +109,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
           }
           Navigator.pop(context);
           _showSnackBar(context, '스토리가 기록됐습니다.');
-          setState(() {});
         },
         child: const Text("Post!"),
         style: ElevatedButton.styleFrom(

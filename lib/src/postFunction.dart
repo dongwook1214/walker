@@ -4,7 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-positionPostFunction(String id, LatLng position, String story, XFile image) {
+Future positionPostFunction(
+    String id, LatLng position, String story, XFile image) async {
   // 위치에 따라 스토리 기록
   CollectionReference positionCollection =
       FirebaseFirestore.instance.collection('position/');

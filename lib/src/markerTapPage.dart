@@ -19,22 +19,31 @@ class _MarkerTapPageState extends State<MarkerTapPage> {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        Container(
-          height: size.height * 0.8,
-          child: FutureBuilder(
-            future: getStoryAndImage(widget.position),
-            builder: (context, AsyncSnapshot<List> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data![0].length,
-                  itemBuilder: (context, index) {
-                    return createListTile(snapshot.data, index);
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 10,
+              ),
+              Container(
+                height: size.height * 0.8,
+                child: FutureBuilder(
+                  future: getStoryAndImage(widget.position),
+                  builder: (context, AsyncSnapshot<List> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot.data![0].length,
+                        itemBuilder: (context, index) {
+                          return _createListTile(snapshot.data, index);
+                        },
+                      );
+                    } else {
+                      return Text("Loading...");
+                    }
                   },
-                );
-              } else {
-                return Text("Loading...");
-              }
-            },
+                ),
+              ),
+            ],
           ),
         ),
         storyPlusButton(widget.position),
@@ -42,7 +51,7 @@ class _MarkerTapPageState extends State<MarkerTapPage> {
     );
   }
 
-  Widget createListTile(storyAndImageList, index) {
+  Widget _createListTile(storyAndImageList, index) {
     return Card(
         child: ListTile(
       leading: ConstrainedBox(

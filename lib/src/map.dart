@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/src/manageStoryPage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'AddStoryPage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'getMarkerPosition.dart';
+import 'manageStoryPage.dart';
 
 class Map extends StatefulWidget {
   final String id;
@@ -18,12 +20,14 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Stack(
-        children: [
-          googleMap(),
-          _markerButton(size),
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            googleMap(),
+            _markerButton(size),
+          ],
+        ),
       ),
     );
   }
@@ -81,7 +85,9 @@ class _MapState extends State<Map> {
           ElevatedButton(
             onPressed: () {
               _onMarkerButtonPressed(size);
-              setState(() {});
+            },
+            onLongPress: () {
+              _onMarkerButtonLongPressed(size);
             },
             child: const Icon(
               Icons.add_location_alt_outlined,
@@ -99,7 +105,7 @@ class _MapState extends State<Map> {
     );
   }
 
-  void _onMarkerButtonPressed(size) {
+  void _onMarkerButtonLongPressed(size) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -107,10 +113,24 @@ class _MapState extends State<Map> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return AddStoryPage(
-            id: widget.id,
-            position: widget.position,
-          );
+          return ManageStoryPage(id: widget.id);
         });
+  }
+
+  void _onMarkerButtonPressed(size) async {
+    await showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AddStoryPage(
+          id: widget.id,
+          position: widget.position,
+        );
+      },
+    );
+    setState(() {});
   }
 }
